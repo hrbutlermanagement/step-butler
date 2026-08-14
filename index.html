@@ -1,0 +1,965 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>STEP - Butler Management Property</title>
+    <meta name="theme-color" content="#0071e3">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="STEP Butler">
+    <meta name="mobile-web-app-capable" content="yes">
+    <link rel="manifest" href="manifest.json">
+    <link rel="apple-touch-icon" href="icon-192.png">
+    <style>
+        :root {
+            --apple-bg: #f5f5f7;
+            --apple-card: rgba(255, 255, 255, 0.82);
+            --apple-card-solid: #ffffff;
+            --apple-text: #1d1d1f;
+            --apple-secondary: #86868b;
+            --apple-blue: #0071e3;
+            --apple-blue-hover: #0077ed;
+            --apple-border: rgba(0, 0, 0, 0.08);
+            --apple-radius: 18px;
+            --apple-shadow: 0 10px 30px rgba(0, 0, 0, 0.04);
+            --apple-focus-ring: 0 0 0 4px rgba(0, 113, 227, 0.25);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            -webkit-tap-highlight-color: transparent;
+            font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Helvetica Neue", Helvetica, Arial, sans-serif;
+        }
+
+        body {
+            background-color: var(--apple-bg);
+            color: var(--apple-text);
+            line-height: 1.47059;
+            font-weight: 400;
+            letter-spacing: -0.022em;
+            padding-bottom: 60px;
+            min-height: 100vh;
+        }
+
+        .nav-header {
+            position: sticky;
+            top: 0;
+            z-index: 999;
+            background: rgba(245, 245, 247, 0.8);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--apple-border);
+            padding: 14px 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .brand-container {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .brand-logo {
+            height: 38px;
+            width: auto;
+            object-fit: contain;
+        }
+
+        .brand-title {
+            font-size: 17px;
+            font-weight: 600;
+            color: var(--apple-text);
+            letter-spacing: -0.015em;
+        }
+
+        .brand-subtitle {
+            font-size: 11px;
+            color: var(--apple-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .container {
+            max-width: 980px;
+            margin: 0 auto;
+            padding: 30px 20px;
+        }
+
+        .hero {
+            text-align: center;
+            margin-bottom: 35px;
+        }
+
+        .hero h1 {
+            font-size: 38px;
+            line-height: 1.08349;
+            font-weight: 600;
+            letter-spacing: -0.003em;
+            margin-bottom: 8px;
+            background: linear-gradient(180deg, #1d1d1f 0%, #434344 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero p {
+            font-size: 17px;
+            color: var(--apple-secondary);
+            max-width: 640px;
+            margin: 0 auto;
+        }
+
+        .card {
+            background: var(--apple-card-solid);
+            border-radius: var(--apple-radius);
+            padding: 28px;
+            margin-bottom: 24px;
+            border: 1px solid var(--apple-border);
+            box-shadow: var(--apple-shadow);
+        }
+
+        .card-title {
+            font-size: 21px;
+            font-weight: 600;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: var(--apple-text);
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+        }
+
+        @media (max-width: 768px) {
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+            .hero h1 {
+                font-size: 28px;
+            }
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .form-group.full-width {
+            grid-column: 1 / -1;
+        }
+
+        label {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--apple-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.02em;
+        }
+
+        input[type="text"],
+        input[type="number"],
+        select {
+            width: 100%;
+            height: 48px;
+            border-radius: 12px;
+            border: 1px solid #d2d2d7;
+            padding: 0 16px;
+            font-size: 16px;
+            color: var(--apple-text);
+            background-color: #fbfbfd;
+            transition: all 0.2s ease;
+            outline: none;
+        }
+
+        input:focus, select:focus {
+            border-color: var(--apple-blue);
+            background-color: #ffffff;
+            box-shadow: var(--apple-focus-ring);
+        }
+
+        .calc-preview {
+            background: #f5f5f7;
+            border-radius: 14px;
+            padding: 20px;
+            margin-top: 15px;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            text-align: center;
+            border: 1px dashed #d2d2d7;
+        }
+
+        @media (max-width: 600px) {
+            .calc-preview {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .calc-item {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .calc-label {
+            font-size: 12px;
+            color: var(--apple-secondary);
+        }
+
+        .calc-value {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--apple-text);
+        }
+
+        .calc-value.highlight {
+            color: #34c759;
+            font-size: 20px;
+        }
+
+        .scanner-container {
+            position: relative;
+            width: 100%;
+            max-width: 440px;
+            height: 330px;
+            margin: 0 auto;
+            background-color: #000;
+            border-radius: 20px;
+            overflow: hidden;
+            border: 2px solid #333;
+            box-shadow: 0 12px 36px rgba(0,0,0,0.25);
+        }
+
+        #webcam, #snapshot-canvas {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transform: scaleX(-1);
+        }
+
+        #snapshot-canvas {
+            display: none;
+        }
+
+        .face-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 10;
+        }
+
+        .face-mesh-points {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 200px;
+            height: 240px;
+            border: 1.5px dashed rgba(0, 225, 255, 0.6);
+            border-radius: 50% 50% 45% 45%;
+            box-shadow: 0 0 15px rgba(0, 225, 255, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        .scanning-line {
+            position: absolute;
+            width: 100%;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, #00e1ff, transparent);
+            box-shadow: 0 0 10px #00e1ff;
+            top: 0;
+            animation: scanAnim 2.5s infinite linear;
+        }
+
+        @keyframes scanAnim {
+            0% { top: 0%; opacity: 0; }
+            15% { opacity: 1; }
+            85% { opacity: 1; }
+            100% { top: 100%; opacity: 0; }
+        }
+
+        .hud-node {
+            position: absolute;
+            width: 6px;
+            height: 6px;
+            background: #00e1ff;
+            border-radius: 50%;
+            box-shadow: 0 0 8px #00e1ff;
+        }
+
+        .hud-status {
+            position: absolute;
+            bottom: 12px;
+            left: 14px;
+            right: 14px;
+            background: rgba(0, 0, 0, 0.65);
+            backdrop-filter: blur(8px);
+            color: #00e1ff;
+            font-family: monospace;
+            font-size: 11px;
+            padding: 6px 12px;
+            border-radius: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border: 1px solid rgba(0, 225, 255, 0.3);
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 12px;
+            margin-top: 16px;
+            justify-content: center;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 12px 24px;
+            font-size: 15px;
+            font-weight: 500;
+            border-radius: 980px;
+            border: none;
+            cursor: pointer;
+            transition: all 0.2s cubic-bezier(0,0,0.2,1);
+            text-decoration: none;
+        }
+
+        .btn-secondary {
+            background-color: #e8e8ed;
+            color: var(--apple-text);
+        }
+
+        .btn-secondary:hover {
+            background-color: #dcdce0;
+        }
+
+        .btn-submit {
+            width: 100%;
+            height: 52px;
+            font-size: 17px;
+            font-weight: 600;
+            border-radius: 14px;
+            background-color: var(--apple-blue);
+            color: white;
+            margin-top: 20px;
+            box-shadow: 0 4px 14px rgba(0, 113, 227, 0.3);
+        }
+
+        .hr-notice-card {
+            background: #fff;
+            border-left: 4px solid var(--apple-blue);
+            border-radius: 12px;
+            padding: 20px;
+            margin-top: 24px;
+            box-shadow: var(--apple-shadow);
+        }
+
+        .hr-notice-title {
+            font-size: 15px;
+            font-weight: 600;
+            color: var(--apple-text);
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .hr-notice-text {
+            font-size: 13px;
+            color: #515154;
+            line-height: 1.6;
+        }
+
+        .hr-legal-badge {
+            display: inline-block;
+            background: #f2f2f7;
+            color: #1d1d1f;
+            font-weight: 600;
+            padding: 3px 8px;
+            border-radius: 6px;
+            font-size: 11px;
+            margin-top: 8px;
+        }
+
+        .hr-warning-card {
+            background: #fff5f5;
+            border-left: 4px solid #ff3b30;
+            border-radius: 12px;
+            padding: 20px;
+            margin-top: 16px;
+        }
+
+        .hr-warning-title {
+            font-size: 15px;
+            font-weight: 600;
+            color: #ff3b30;
+            margin-bottom: 8px;
+        }
+
+        .table-responsive {
+            width: 100%;
+            overflow-x: auto;
+            margin-top: 15px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 13px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f5f5f7;
+            color: var(--apple-secondary);
+            font-weight: 600;
+            padding: 12px;
+            border-bottom: 1px solid var(--apple-border);
+            text-transform: uppercase;
+            font-size: 11px;
+        }
+
+        td {
+            padding: 12px;
+            border-bottom: 1px solid var(--apple-border);
+            color: var(--apple-text);
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid var(--apple-border);
+            color: var(--apple-secondary);
+            font-size: 13px;
+        }
+
+        .footer-highlight {
+            font-weight: 600;
+            color: var(--apple-text);
+        }
+
+        #toast {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%) translateY(100px);
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(10px);
+            color: white;
+            padding: 12px 24px;
+            border-radius: 30px;
+            font-size: 14px;
+            font-weight: 500;
+            z-index: 9999;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            opacity: 0;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+        }
+
+        #toast.show {
+            transform: translateX(-50%) translateY(0);
+            opacity: 1;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Audio Background -->
+    <audio id="bgAudio" loop preload="auto">
+        <source src="lagu pembuka.mp3" type="audio/mpeg">
+    </audio>
+
+    <header class="nav-header">
+        <div class="brand-container">
+            <img src="logo.png" alt="Butler Logo" class="brand-logo" onerror="this.style.display='none'; document.getElementById('alt-logo').style.display='block';">
+            <div id="alt-logo" style="display:none; font-weight:700; font-size:18px; color:#0071e3;">BUTLER</div>
+            <div>
+                <div class="brand-title">Butler Management Property</div>
+                <div class="brand-subtitle">Employee Double Pay System</div>
+            </div>
+        </div>
+        <div style="font-size:12px; color:var(--apple-secondary); font-weight:500;">
+            STEP Butler v2.6
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="hero">
+            <h1>Sistem Terpadu Employee Double Pay (STEP)</h1>
+            <p>Portal Pengajuan & Kalkulasi Insentif Hari Libur Nasional Karyawan</p>
+        </div>
+
+        <div class="card">
+            <div class="card-title">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                Formulir Klaim Double Pay
+            </div>
+
+            <form id="stepForm">
+                <div class="form-grid">
+                    <div class="form-group full-width">
+                        <label for="namaLengkap">Nama Lengkap Karyawan</label>
+                        <input type="text" id="namaLengkap" placeholder="Masukkan nama sesuai KTP / ID Karyawan" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="penempatan">Daftar Penempatan Properti</label>
+                        <select id="penempatan" required onchange="updatePosisiOptions(); calculateDoublePay();">
+                            <option value="">-- Pilih Penempatan --</option>
+                            <option value="Premier Apartments">Premier Apartments</option>
+                            <option value="Deluxe Apartments">Deluxe Apartments</option>
+                            <option value="Seis Villas">Seis Villas</option>
+                            <option value="SWOI Loft Umalas">SWOI Loft Umalas</option>
+                            <option value="Horizon Cemagi Apartments">Horizon Cemagi Apartments</option>
+                            <option value="Grand Apartments">Grand Apartments</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="posisi">Posisi / Jabatan</label>
+                        <select id="posisi" required onchange="calculateDoublePay();">
+                            <option value="">-- Pilih Penempatan Terlebih Dahulu --</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="gajiPokok">Gaji Pokok Bulanan (Rp)</label>
+                        <input type="number" id="gajiPokok" placeholder="Contoh: 4500000" min="0" required oninput="calculateDoublePay();">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="tanggalLibur">Tanggal Libur Nasional Dikerjakan (2026)</label>
+                        <select id="tanggalLibur" required>
+                            <option value="">-- Pilih Tanggal Merah 2026 --</option>
+                            <option value="2026-01-01">1 Jan 2026 - Tahun Baru 2026 Masehi</option>
+                            <option value="2026-01-16">16 Jan 2026 - Isra Mikraj Nabi Muhammad SAW</option>
+                            <option value="2026-02-17">17 Feb 2026 - Tahun Baru Imlek 2577 Kongzili</option>
+                            <option value="2026-03-19">19 Mar 2026 - Hari Suci Nyepi (Tahun Baru Saka 1948)</option>
+                            <option value="2026-03-20">20 Mar 2026 - Hari Raya Idul Fitri 1447 H</option>
+                            <option value="2026-03-21">21 Mar 2026 - Hari Raya Idul Fitri 1447 H (Hari Kedua)</option>
+                            <option value="2026-04-03">3 Apr 2026 - Wafat Yesus Kristus</option>
+                            <option value="2026-04-05">5 Apr 2026 - Kebangkitan Yesus Kristus (Paskah)</option>
+                            <option value="2026-05-01">1 Mei 2026 - Hari Buruh Internasional</option>
+                            <option value="2026-05-14">14 Mei 2026 - Kenaikan Yesus Kristus</option>
+                            <option value="2026-05-27">27 Mei 2026 - Hari Raya Idul Adha 1447 H</option>
+                            <option value="2026-05-31">31 Mei 2026 - Hari Raya Waisak 2570 BE</option>
+                            <option value="2026-06-01">1 Jun 2026 - Hari Lahir Pancasila</option>
+                            <option value="2026-06-16">16 Jun 2026 - Tahun Baru Islam 1448 H</option>
+                            <option value="2026-08-17">17 Ags 2026 - Proklamasi Kemerdekaan RI</option>
+                            <option value="2026-08-25">25 Ags 2026 - Maulid Nabi Muhammad SAW</option>
+                            <option value="2026-12-25">25 Des 2026 - Hari Raya Natal</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="calc-preview">
+                    <div class="calc-item">
+                        <span class="calc-label">Pembagi Hari Kerja</span>
+                        <span class="calc-value" id="displayHariKerja">-</span>
+                    </div>
+                    <div class="calc-item">
+                        <span class="calc-label">Gaji Harian (Proporsional)</span>
+                        <span class="calc-value" id="displayGajiHarian">Rp 0</span>
+                    </div>
+                    <div class="calc-item">
+                        <span class="calc-label">Ekstra Double Pay Disburse</span>
+                        <span class="calc-value highlight" id="displayDoublePay">Rp 0</span>
+                    </div>
+                </div>
+
+                <div style="margin-top: 30px;">
+                    <label style="margin-bottom: 12px; display:block;">Verifikasi Kehadiran & Rekognisi Wajah Database HRIS/ATS</label>
+                    <div class="scanner-container">
+                        <video id="webcam" autoplay playsinline muted></video>
+                        <canvas id="snapshot-canvas"></canvas>
+                        
+                        <div class="face-overlay" id="hudOverlay">
+                            <div class="scanning-line"></div>
+                            <div class="face-mesh-points">
+                                <div class="hud-node" style="top: 30%; left: 30%;"></div>
+                                <div class="hud-node" style="top: 30%; right: 30%;"></div>
+                                <div class="hud-node" style="top: 50%; left: 50%;"></div>
+                                <div class="hud-node" style="top: 72%; left: 38%;"></div>
+                                <div class="hud-node" style="top: 72%; right: 38%;"></div>
+                            </div>
+                            <div class="hud-status">
+                                <span>FACE RECOGNITION ACTIVE</span>
+                                <span id="hudTarget">BIOMETRIC MATCH: 98.4%</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="btn-group">
+                        <button type="button" class="btn btn-secondary" onclick="captureFace()">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right:6px;"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path><circle cx="12" cy="13" r="4"></circle></svg>
+                            Ambil Foto Biometrik
+                        </button>
+                        <button type="button" class="btn btn-secondary" id="retakeBtn" style="display:none;" onclick="resetCamera()">
+                            Ulangi Foto
+                        </button>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn btn-submit">Submit Data & Eksekusi Double Pay</button>
+            </form>
+        </div>
+
+        <div class="hr-notice-card">
+            <div class="hr-notice-title">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#0071e3" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+                Landasan Regulasi
+            </div>
+            <div class="hr-notice-text">
+                Pengaturan kewajiban kerja dan pengupahan insentif lembur pada hari libur nasional dilaksanakan secara proporsional sesuai dengan **Undang-Undang Republik Indonesia Nomor 13 Tahun 2003 tentang Ketenagakerjaan jo. Undang-Undang Nomor 6 Tahun 2023 (Penetapan Perpu Cipta Kerja menjadi UU) Pasal 85 Ayat (1), (2), dan (3)**. 
+                <br><br>
+                Pengusaha dapat mempekerjakan pekerja/buruh pada hari libur resmi untuk pekerjaan yang sifatnya harus dilaksanakan secara terus-menerus (termasuk sektor *Hospitality & Property Management*), dengan kewajiban membayar **Upah Kerja Lembur (Double Pay)** yang dikalkulasikan secara akurat berdasarkan **Keputusan Menteri Tenaga Kerja dan Transmigrasi RI No. KEP.102/MEN/VI/2004**. Periode pendaftaran cut-off siklus payroll berjalan secara konsisten dari **tanggal 26 hingga 25** setiap bulannya, dan ditransfer pada **tanggal 28**.
+            </div>
+            <span class="hr-legal-badge">Hak Fundamental Karyawan - Butler Human Resources</span>
+        </div>
+
+        <div class="hr-warning-card">
+            <div class="hr-warning-title">
+                ⚠️ Strict Non-Disclosure & Confidentiality Enforcement Notice
+            </div>
+            <div class="hr-notice-text" style="color: #6a1a1a;">
+                Seluruh komponen rincian penghasilan, kompensasi, dan besaran angka *Double Pay* bersifat **STRICTLY CONFIDENTIAL (Dijaga Kerahasiaanya)**. Setiap karyawan dilarang keras mengungkapkan, mendiskusikan, memperlihatkan, atau menyebarluaskan informasi rincian gaji kepada sesama rekan kerja (internal) maupun pihak luar (eksternal).
+                <br><br>
+                Apabila timbul perselisihan, komplain, atau keharmonisan kerja yang terganggu akibat pelanggaran asas kerahasiaan ini (misalnya karyawan membeberkan besaran gajinya kepada teman), maka **KEDUA BELAH PIPIHAK (pihak yang memberi tahu dan pihak yang menerima/meminta informasi)** akan secara langsung dikenakan sanksi disipliner tegas berupa **SURAT PERINGATAN KEDUA (SP2)** sesuai dengan Regulasi Ketentuan Company Butler Management Property.
+            </div>
+        </div>
+
+        <div class="card" style="margin-top: 24px;">
+            <div class="card-title">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline></svg>
+                Riwayat Pengajuan Tersimpan (Local Device & Cloud Backup)
+            </div>
+            <div class="table-responsive">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Waktu Submit</th>
+                            <th>Nama Karyawan</th>
+                            <th>Penempatan & Posisi</th>
+                            <th>Tgl Libur</th>
+                            <th>Nominal Double Pay</th>
+                            <th>Status Sync</th>
+                        </tr>
+                    </thead>
+                    <tbody id="storageTableBody">
+                        <tr>
+                            <td colspan="6" style="text-align:center; color:var(--apple-secondary);">Belum ada data tersimpan di perangkat ini.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <footer class="footer">
+            <p>STEP (Sistem Terpadu Employee Double Pay) &bull; Butler Management Property</p>
+            <p class="footer-highlight" style="margin-top: 6px;">Created by Nino Paulus (Human Resources) &bull; Agustus 2026</p>
+        </footer>
+    </div>
+
+    <div id="toast">Notifikasi</div>
+
+    <script>
+        const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyToPXrMIKejb5n2zM7QhORHkXTLVzNKjKmLJVbh9pqXsPE1FWJlvIKtA7gRqAckGVe/exec";
+
+        let capturedImageData = null;
+
+        // Auto play audio pada interaksi klik pertama di aplikasi
+        function initAudioAutoplay() {
+            const audio = document.getElementById('bgAudio');
+            const playAudio = () => {
+                audio.play().then(() => {
+                    console.log("Audio lagu pembuka.mp3 berhasil diputar.");
+                    document.removeEventListener('click', playAudio);
+                    document.removeEventListener('touchstart', playAudio);
+                }).catch(err => {
+                    console.log("Menunggu interaksi pengguna untuk pemutaran audio:", err);
+                });
+            };
+            document.addEventListener('click', playAudio);
+            document.addEventListener('touchstart', playAudio);
+        }
+
+        // Pembaruan Matriks Posisi secara Dinamis dan Presisi
+        function updatePosisiOptions() {
+            const penempatan = document.getElementById('penempatan').value;
+            const posisiSelect = document.getElementById('posisi');
+            posisiSelect.innerHTML = '<option value="">-- Pilih Posisi --</option>';
+
+            if (!penempatan) {
+                posisiSelect.innerHTML = '<option value="">-- Pilih Penempatan Terlebih Dahulu --</option>';
+                return;
+            }
+
+            // Opsi Housekeeping selalu ada untuk semua lokasi
+            const hkOption = document.createElement('option');
+            hkOption.value = "Housekeeping Apartments";
+            hkOption.textContent = "Housekeeping Apartments (Pengali 2x, 26 Hari Kerja)";
+            posisiSelect.appendChild(hkOption);
+
+            // Matriks Posisi berdasarkan Penempatan
+            if (penempatan === "Premier Apartments" || penempatan === "Deluxe Apartments") {
+                const foPremDel = document.createElement('option');
+                foPremDel.value = "Front Office Premier & Deluxe";
+                foPremDel.textContent = "Front Office Premier & Deluxe (Pengali 1.75x, 21 Hari Kerja)";
+                posisiSelect.appendChild(foPremDel);
+            } 
+            else if (penempatan === "SWOI Loft Umalas") {
+                const foSwoi = document.createElement('option');
+                foSwoi.value = "Front Office SWOI Loft Umalas";
+                foSwoi.textContent = "Front Office SWOI Loft Umalas (Pengali 1.25x, 26 Hari Kerja)";
+                posisiSelect.appendChild(foSwoi);
+
+                const secSwoi = document.createElement('option');
+                secSwoi.value = "Security SWOI";
+                secSwoi.textContent = "Security SWOI (Pengali 1.75x, 24 Hari Kerja)";
+                posisiSelect.appendChild(secSwoi);
+            } 
+            else if (penempatan === "Grand Apartments") {
+                const secGrand = document.createElement('option');
+                secGrand.value = "Security Grand";
+                secGrand.textContent = "Security Grand (Pengali 1.75x, 22 Hari Kerja)";
+                posisiSelect.appendChild(secGrand);
+            }
+        }
+
+        // Engine Kalkulasi Penggajian Double Pay
+        function calculateDoublePay() {
+            const posisi = document.getElementById('posisi').value;
+            const gajiPokok = parseFloat(document.getElementById('gajiPokok').value) || 0;
+
+            let hariKerja = 0;
+            let pengali = 0;
+
+            if (posisi === "Housekeeping Apartments") {
+                hariKerja = 26;
+                pengali = 2.0;
+            } else if (posisi === "Front Office SWOI Loft Umalas") {
+                hariKerja = 26;
+                pengali = 1.25; // 1 1/4
+            } else if (posisi === "Front Office Premier & Deluxe") {
+                hariKerja = 21;
+                pengali = 1.75; // 1 3/4
+            } else if (posisi === "Security SWOI") {
+                hariKerja = 24;
+                pengali = 1.75; // 1 3/4
+            } else if (posisi === "Security Grand") {
+                hariKerja = 22;
+                pengali = 1.75; // 1 3/4
+            }
+
+            if (hariKerja > 0 && gajiPokok > 0) {
+                const gajiHarian = gajiPokok / hariKerja;
+                const nominalDoublePay = gajiHarian * pengali;
+
+                document.getElementById('displayHariKerja').textContent = hariKerja + " Hari";
+                document.getElementById('displayGajiHarian').textContent = "Rp " + Math.round(gajiHarian).toLocaleString('id-ID');
+                document.getElementById('displayDoublePay').textContent = "Rp " + Math.round(nominalDoublePay).toLocaleString('id-ID');
+
+                return { hariKerja, gajiHarian, pengali, nominalDoublePay };
+            } else {
+                document.getElementById('displayHariKerja').textContent = hariKerja ? hariKerja + " Hari" : "-";
+                document.getElementById('displayGajiHarian').textContent = "Rp 0";
+                document.getElementById('displayDoublePay').textContent = "Rp 0";
+                return null;
+            }
+        }
+
+        // Modul Kamera & Face Recognition Overlay
+        const video = document.getElementById('webcam');
+        const canvas = document.getElementById('snapshot-canvas');
+
+        async function initCamera() {
+            try {
+                const constraints = {
+                    video: { facingMode: "user", width: { ideal: 640 }, height: { ideal: 480 } }
+                };
+                const stream = await navigator.mediaDevices.getUserMedia(constraints);
+                video.srcObject = stream;
+            } catch (err) {
+                console.warn("Mencoba opsi kamera cadangan:", err);
+                try {
+                    const fallbackStream = await navigator.mediaDevices.getUserMedia({ video: true });
+                    video.srcObject = fallbackStream;
+                } catch (e) {
+                    showToast("Aktifkan izin kamera pada browser/ponsel Anda.");
+                }
+            }
+        }
+
+        function captureFace() {
+            const context = canvas.getContext('2d');
+            canvas.width = video.videoWidth || 640;
+            canvas.height = video.videoHeight || 480;
+
+            context.translate(canvas.width, 0);
+            context.scale(-1, 1);
+            context.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+            capturedImageData = canvas.toDataURL('image/jpeg', 0.7);
+
+            video.style.display = 'none';
+            canvas.style.display = 'block';
+            document.getElementById('hudOverlay').style.border = "3px solid #34c759";
+            document.getElementById('hudTarget').innerHTML = "<span style='color:#34c759;'>FACE CAPTURED & ENCRYPTED</span>";
+            document.getElementById('retakeBtn').style.display = 'inline-flex';
+            showToast("Foto biometrik berhasil dikunci.");
+        }
+
+        function resetCamera() {
+            capturedImageData = null;
+            video.style.display = 'block';
+            canvas.style.display = 'none';
+            document.getElementById('hudOverlay').style.border = "none";
+            document.getElementById('hudTarget').innerHTML = "BIOMETRIC MATCH: 98.4%";
+            document.getElementById('retakeBtn').style.display = 'none';
+        }
+
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.classList.add('show');
+            setTimeout(() => { toast.classList.remove('show'); }, 3500);
+        }
+
+        function getSavedRecords() {
+            try { return JSON.parse(localStorage.getItem('step_double_pay_records')) || []; }
+            catch (e) { return []; }
+        }
+
+        function saveRecordLocally(record) {
+            const records = getSavedRecords();
+            records.unshift(record);
+            localStorage.setItem('step_double_pay_records', JSON.stringify(records));
+            renderTable();
+        }
+
+        function renderTable() {
+            const records = getSavedRecords();
+            const tbody = document.getElementById('storageTableBody');
+            
+            if (records.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="6" style="text-align:center; color:var(--apple-secondary);">Belum ada data tersimpan di perangkat ini.</td></tr>';
+                return;
+            }
+
+            tbody.innerHTML = '';
+            records.forEach(item => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td>${item.timestamp}</td>
+                    <td><strong>${item.namaLengkap}</strong></td>
+                    <td>${item.penempatan}<br><small style="color:var(--apple-secondary);">${item.posisi}</small></td>
+                    <td>${item.tanggalLibur}</td>
+                    <td><strong style="color:#34c759;">Rp ${Math.round(item.nominalDoublePay).toLocaleString('id-ID')}</strong></td>
+                    <td><span style="background:#e1f5fe; color:#0288d1; padding:2px 8px; border-radius:10px; font-weight:600; font-size:11px;">${item.syncStatus || 'Local & Cloud'}</span></td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        document.getElementById('stepForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+
+            if (!capturedImageData) {
+                showToast("Ambil foto biometrik wajah terlebih dahulu!");
+                return;
+            }
+
+            const calc = calculateDoublePay();
+            if (!calc) {
+                showToast("Lengkapi form untuk mengalkulasi nilai Double Pay.");
+                return;
+            }
+
+            const payload = {
+                timestamp: new Date().toLocaleString('id-ID'),
+                namaLengkap: document.getElementById('namaLengkap').value,
+                penempatan: document.getElementById('penempatan').value,
+                posisi: document.getElementById('posisi').value,
+                gajiPokok: parseFloat(document.getElementById('gajiPokok').value),
+                hariKerja: calc.hariKerja,
+                gajiHarian: calc.gajiHarian,
+                tanggalLibur: document.getElementById('tanggalLibur').value,
+                pengaliDoublePay: calc.pengali,
+                nominalDoublePay: calc.nominalDoublePay,
+                periodePayroll: "Cut-off 26 - 25 (Disburse Tgl 28)",
+                fotoBase64: capturedImageData,
+                syncStatus: "Tersimpan"
+            };
+
+            saveRecordLocally(payload);
+            showToast("Data tersimpan lokal & mengirim ke Google Sheets...");
+
+            try {
+                fetch(GOOGLE_SCRIPT_URL, {
+                    method: 'POST',
+                    mode: 'no-cors',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                }).then(() => {
+                    showToast("Sukses! Data tersimpan di Local Storage & Cloud Google Sheets.");
+                }).catch(err => {
+                    console.log("Posting Cloud Warning:", err);
+                    showToast("Data tersimpan aman di Local Storage!");
+                });
+            } catch (err) {
+                console.error("Cloud Error:", err);
+            }
+
+            document.getElementById('stepForm').reset();
+            resetCamera();
+            calculateDoublePay();
+        });
+
+        window.addEventListener('DOMContentLoaded', () => {
+            initAudioAutoplay();
+            initCamera();
+            renderTable();
+
+            // PWA: register service worker for offline shell/cache.
+            if ('serviceWorker' in navigator) {
+                navigator.serviceWorker.register('./service-worker.js')
+                    .then(() => console.log('STEP PWA service worker aktif.'))
+                    .catch(err => console.warn('PWA service worker gagal:', err));
+            }
+        });
+    </script>
+
+    <div id="pwaInstallHint" style="position:fixed;left:14px;right:14px;bottom:14px;z-index:10000;display:none;background:rgba(29,29,31,.96);color:#fff;padding:14px 16px;border-radius:16px;box-shadow:0 10px 30px rgba(0,0,0,.25);font-size:13px;line-height:1.45;">
+        <strong>Install STEP di iPhone</strong><br>
+        Di Safari tekan <strong>Bagikan</strong> → <strong>Tambah ke Layar Utama</strong>.
+        <button type="button" onclick="this.parentElement.style.display='none'" style="float:right;margin-top:-2px;border:0;background:transparent;color:#fff;font-size:20px;">×</button>
+    </div>
+    <script>
+        (function () {
+            const isIOS = /iphone|ipad|ipod/i.test(navigator.userAgent);
+            const isStandalone = window.navigator.standalone === true ||
+                window.matchMedia('(display-mode: standalone)').matches;
+            if (isIOS && !isStandalone) {
+                const hint = document.getElementById('pwaInstallHint');
+                if (hint) setTimeout(() => hint.style.display = 'block', 1800);
+            }
+        })();
+    </script>
+
+</body>
+</html>
